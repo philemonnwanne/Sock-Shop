@@ -1,3 +1,5 @@
-# Sock-Shop
 
-CapStone Project
+# CapStone Project
+
+## Sock-Shop
+## 
