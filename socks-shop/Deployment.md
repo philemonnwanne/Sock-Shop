@@ -1,0 +1,42 @@
+### After setting up the `EKS` cluster
+Run the following command to retrieve the access credentials for your cluster and configure `kubectl`.
+
+## Error
+If you come across the following error while trying
+'NoneType' object is not iterable
+
+`Note:` If you already have a `~/.kube/config`, there could be a conflict between the file to be generated, and the file that already exists that prevents them from being merged.
+
+
+If you have a `~/.kube/config` file, and you aren't actively using it, run the following to remove it
+
+```bash
+rm ~/.kube/config
+```
+
+Then run to fix the issue
+```bash
+aws eks --region $(terraform output -raw region) update-kubeconfig \
+    --name $(terraform output -raw cluster_name)
+```
+
+You can now use `kubectl` to manage your cluster and deploy Kubernetes configurations to it.
+
+## Verify the Cluster
+
+Use kubectl commands to verify your cluster configuration.
+
+First, get information about the cluster.
+
+```bash
+kubectl cluster-info
+```
+
+You sshould get an output like below
+```js
+Kubernetes control plane is running at https://82F69692ACBBEE3DF2DC94BD9B64D6B0.gr7.us-east-1.eks.amazonaws.com
+CoreDNS is running at https://82F69692ACBBEE3DF2DC94BD9B64D6B0.gr7.us-east-1.eks.amazonaws.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+```
+
