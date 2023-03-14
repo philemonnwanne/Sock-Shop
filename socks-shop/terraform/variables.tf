@@ -1,50 +1,59 @@
-variable "aws_amis" {
-  description = "The AMI to use for setting up the instances."
-  default = {
-    # Ubuntu Xenial 16.04 LTS
-    "eu-west-1" = "ami-58b7972b"
-    "eu-west-2" = "ami-ede2e889"
-    "eu-central-1" = "ami-1535f57a"
-    "us-east-1" = "ami-bcd7c3ab"
-    "us-east-2" = "ami-fcc19b99"
-    "us-west-1" = "ami-ed50018d"
-    "us-west-2" = "ami-15d76075"
-  }
-}
-
-data "aws_availability_zones" "available" {}
-
 variable "aws_region" {
-  description = "The AWS region to create things in."
-  default     = "eu-central-1"
+  description = "region to deploy all project resources"
+  type        = string
+  default     = "us-east-1"
 }
 
-variable "instance_user" {
-  description = "The user account to use on the instances to run the scripts."
-  default     = "ubuntu"
+variable "domain_name" {
+  description = "domain name to attach"
+  type        = string
+  default     = "philemonnwanne.me"
 }
 
-variable "key_name" {
-  description = "Name of the SSH keypair to use in AWS."
-  default     = "deploy-docs-k8s"
+variable "vpc_name" {
+  description = "Name of VPC"
+  type        = string
+  default     = "capstone_vpc"
 }
 
-variable "master_instance_type" {
-  description = "The instance type to use for the Kubernetes master."
-  default     = "m3.large"
+variable "cidr" {
+  description = "CIDR block for VPC"
+  type        = string
+  default     = "10.0.0.0/16"
 }
 
-variable "node_instance_type" {
-  description = "The instance type to use for the Kubernetes nodes."
-  default     = "m3.large"
+variable "azs" {
+  description = "availability zones for VPC"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
-variable "node_count" {
-  description = "The number of nodes in the cluster."
-  default     = "3"
+variable "public_subnets" {
+  description = "public subnets for VPC"
+  type        = list(string)
+  default     = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
 }
 
-variable "private_key_path" {
-  description = "The private key for connection to the instances as the user. Corresponds to the key_name variable."
-  default     = "~/.ssh/deploy-docs-k8s.pem"
+variable "public_subnets_names" {
+  description = "private subnet names for VPC"
+  type        = list(string)
+  default     = ["capstone-subnet-public1-us-east-1a", "capstone-subnet-public2-us-east-1b","capstone-subnet-public2-us-east-1c"]
+}
+
+variable "private_subnets" {
+  description = "private subnets for VPC"
+  type        = list(string)
+  default     = ["10.0.128.0/20", "10.0.144.0/20", "10.0.160.0/20"]
+}
+
+variable "private_subnets_names" {
+  description = "private subnet names for VPC"
+  type        = list(string)
+  default     = ["capstone-subnet-private1-us-east-1a", "capstone-subnet-private2-us-east-1b", "capstone-subnet-private2-us-east-1c"]
+}
+
+variable "instance_type" {
+  description = "the size of the instance to be deployed"
+  type        = string
+  default     = "t2.medium"
 }
