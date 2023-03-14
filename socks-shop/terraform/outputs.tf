@@ -1,6 +1,12 @@
-output "cluster_id" {
-    value = module.eks.cluster_id
+output "region" {
+  description = "AWS region"
+  value       = var.region
 }
+
+# output "cluster_id" {
+#   description = "The ID of the EKS cluster. Note: currently a value is returned only for local EKS clusters created on Outposts"
+#   value       = module.eks.cluster_id
+# }
 
 output "cluster_endpoint" {
   description = "Endpoint for EKS control plane"

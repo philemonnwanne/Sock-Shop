@@ -1,4 +1,4 @@
-variable "aws_region" {
+variable "region" {
   description = "region to deploy all project resources"
   type        = string
   default     = "us-east-1"
