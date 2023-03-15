@@ -1,6 +1,6 @@
-# Installing sock-shop on Kubernetes
+# Installing [sock-shop](sock-shop) on Kubernetes
 
-See the [documentation](https://microservices-demo.github.io/deployment/kubernetes-minikube.html) on how to deploy Sock Shop using Minikube.
+See the [documentation](https://github.com/philemonnwanne/capstone/blob/main/socks-shop/Deployment.md) on how to deploy Sock Shop using `Terraform`.
 
 ## Kubernetes manifests
 
