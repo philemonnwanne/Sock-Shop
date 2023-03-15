@@ -1,12 +1,11 @@
 ### After setting up the `EKS` cluster
 Run the following command to retrieve the access credentials for your cluster and configure `kubectl`.
 
-## Error
-If you come across the following error while trying
-'NoneType' object is not iterable
+## NoneType Error
+If you come across the following error
+`'NoneType' object is not iterable`
 
 `Note:` If you already have a `~/.kube/config`, there could be a conflict between the file to be generated, and the file that already exists that prevents them from being merged.
-
 
 If you have a `~/.kube/config` file, and you aren't actively using it, run the following to remove it
 
@@ -24,19 +23,44 @@ You can now use `kubectl` to manage your cluster and deploy Kubernetes configura
 
 ## Verify the Cluster
 
-Use kubectl commands to verify your cluster configuration.
+Use `kubectl` commands to verify your cluster configuration.
 
 First, get information about the cluster.
-
 ```bash
 kubectl cluster-info
 ```
 
-You sshould get an output like below
+You should get an output like below
 ```js
 Kubernetes control plane is running at https://82F69692ACBBEE3DF2DC94BD9B64D6B0.gr7.us-east-1.eks.amazonaws.com
 CoreDNS is running at https://82F69692ACBBEE3DF2DC94BD9B64D6B0.gr7.us-east-1.eks.amazonaws.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 
-To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+To further debug and diagnose cluster problems, use `kubectl cluster-info dump`.
+```
+
+The `complete-demo.yml` deployment creates a `sock-shop` namespace
+
+Commands to list all available namespaces
+```bash
+kubectl get ns
+
+kubens
+```
+
+Switch to the `sock-shop` namespace
+```bash
+kubectl config set-context --current --namespace=sock-shop
+```
+
+Then you can show all your pods with
+```bash
+kubectl get pods
+```
+
+Notice that the Kubernetes control plane location matches the `cluster_endpoint` value from the `terraform apply` output above.
+
+Now verify that all three worker nodes are part of the cluster.
+```bash
+kubectl get nodes
 ```
 
