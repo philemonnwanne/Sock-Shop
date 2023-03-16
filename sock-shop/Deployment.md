@@ -1,6 +1,11 @@
 ### After setting up the `EKS` cluster
 Run the following command to retrieve the access credentials for your cluster and configure `kubectl`.
 
+Use the kubectl command to connect to the EKS Cluster and control it
+```bash
+kubectl get nodes
+```
+
 ## NoneType Error
 If you come across the following error
 `'NoneType' object is not iterable`
@@ -17,6 +22,11 @@ Then run to fix the issue
 ```bash
 aws eks --region $(terraform output -raw region) update-kubeconfig \
     --name $(terraform output -raw cluster_name)
+```
+
+If successful you will get the following output.
+```bash
+Added new context arn:aws:eks:<aws-region>:<aws-accunt-id>:cluster/<cluster-name> to /Users/<your-user>/.kube/config
 ```
 
 You can now use `kubectl` to manage your cluster and deploy Kubernetes configurations to it.
