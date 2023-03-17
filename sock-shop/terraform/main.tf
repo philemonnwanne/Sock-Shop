@@ -6,7 +6,35 @@ locals {
   cluster_name = "capstone"
 }
 
+data "aws_caller_identity" "current" {}
 data "aws_availability_zones" "available" {}
+
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_name
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_name
+}
+
+# provider "kubernetes" {
+#   host                   = data.aws_eks_cluster.cluster.endpoint
+#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+#   token                  = data.aws_eks_cluster_auth.cluster.token
+# }
+
+module "eks-kubeconfig" {
+  source  = "hyperbadger/eks-kubeconfig/aws"
+  version = "1.0.0"
+
+  depends_on = [module.eks]
+  cluster_id = module.eks.cluster_name
+}
+
+resource "local_file" "kubeconfig" {
+  content  = module.eks-kubeconfig.kubeconfig
+  filename = "kubeconfig_${local.cluster_name}"
+}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -19,6 +47,7 @@ module "vpc" {
   public_subnets       = var.public_subnets
   private_subnet_names = var.private_subnets_names
   public_subnet_names  = var.public_subnets_names
+  map_public_ip_on_launch = true
   enable_nat_gateway   = true
   single_nat_gateway   = true
   enable_dns_hostnames = true
@@ -41,7 +70,7 @@ module "eks" {
   cluster_name                   = local.cluster_name
   cluster_version                = "1.24"
   cluster_endpoint_public_access = true
-  # cluster_endpoint_private_access = true
+  cluster_endpoint_private_access = true
 
   subnet_ids = module.vpc.private_subnets
 
@@ -88,3 +117,77 @@ resource "aws_iam_role_policy_attachment" "additional" {
   role       = each.value.iam_role_name
 
 }
+
+# module "lb_role" {
+#   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+#   role_name                              = "prod_eks_lb"
+#   attach_load_balancer_controller_policy = true
+
+#   oidc_providers = {
+#     main = {
+#       provider_arn               = module.eks.oidc_provider_arn
+#       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+#     }
+#   }
+# }
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  exec {
+    api_version = "client.authentication.k8s.io/v1"
+    args        = ["eks", "get-token", "--cluster-name", local.cluster_name]
+    command     = "aws"
+  }
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    exec {
+      api_version = "client.authentication.k8s.io/v1"
+      args        = ["eks", "get-token", "--cluster-name", local.cluster_name]
+      command     = "aws"
+    }
+  }
+}
+
+# resource "kubernetes_service_account" "service-account" {
+#   metadata {
+#     name      = "aws-load-balancer-controller"
+#     namespace = "kube-system"
+#     labels = {
+#       "app.kubernetes.io/name"      = "aws-load-balancer-controller"
+#       "app.kubernetes.io/component" = "controller"
+#     }
+#     annotations = {
+#       "eks.amazonaws.com/role-arn"               = module.lb_role.iam_role_arn
+#       "eks.amazonaws.com/sts-regional-endpoints" = "true"
+#     }
+#   }
+# }
+
+resource "helm_release" "ingress" {
+  name       = "ingress"
+  repository = "https://aws.github.io/eks-charts"
+  chart      = "aws-load-balancer-controller"
+  namespace  = "kube-system"
+  version    = "1.4.6"
+
+  set {
+    name  = "autoDiscoverAwsRegion"
+    value = "true"
+  }
+  set {
+    name  = "autoDiscoverAwsVpcID"
+    value = "true"
+  }
+
+  set {
+    name  = "clusterName"
+    value = local.cluster_name
+  }
+}
+
