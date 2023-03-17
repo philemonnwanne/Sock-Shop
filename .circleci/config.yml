@@ -25,9 +25,39 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: terraform
+          name: terraform create infra
           command: |
             terraform apply -auto-approve tfapply
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  deploy:
+    docker:
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: kubectl create deployment
+          command: |
+            kubectl create -f deployment.yml
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  ingress:
+    docker:
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: kubectl create ingress rules
+          command: |
+            kubectl create -f ingress.yml
       - persist_to_workspace:
           root: .
           paths:
@@ -55,7 +85,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: terraform destroy
+          name: terraform destroy infra
           command: |
             terraform apply -auto-approve tfdestroy
 
@@ -72,9 +102,18 @@ workflows:
       - apply:
           requires:
             - hold-apply
+      - deploy:
+          requires:
+            - apply
+      - ingress:
+          requires:
+            - apply
+            - deploy
       - plan-destroy:
           requires:
             - apply
+            - deploy
+            - ingress
       - hold-destroy:
           type: approval
           requires:
