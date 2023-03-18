@@ -8,7 +8,7 @@ jobs:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - checkout:
-          path: ~/capstone
+          path: ~/capstone/sock-shop/terraform
       - run:
           name: terraform init & plan
           command: |
