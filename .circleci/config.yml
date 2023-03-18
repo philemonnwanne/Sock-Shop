@@ -14,10 +14,7 @@ jobs:
           command: |
             terraform init -input=false
             terraform plan -out tfapply -var-file terraform.tfvars
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+     
     
   apply:
     docker:
@@ -29,10 +26,7 @@ jobs:
           name: terraform create infra
           command: |
             terraform apply -auto-approve tfapply
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+   
 
   deploy:
     docker:
@@ -44,10 +38,7 @@ jobs:
           name: kubectl create deployment
           command: |
             kubectl create -f deployment.yml
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+    
 
   ingress:
     docker:
