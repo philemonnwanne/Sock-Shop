@@ -3,7 +3,7 @@ version: 2.1
 # define the jobs we want to run for this project
 jobs:
   plan-apply:
-    working_directory: ~/capstone/sock-shop/terraform
+    working_directory: sock-shop/terraform
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
