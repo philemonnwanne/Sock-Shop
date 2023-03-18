@@ -110,7 +110,7 @@ resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy"
   description = "Worker policy for the ALB Ingress"
 
-  policy = file("${path.cwd}/iam-policy.json")
+  policy = file("${path.cwd}iam-policy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "additional" {
