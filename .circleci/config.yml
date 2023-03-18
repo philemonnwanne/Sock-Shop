@@ -3,7 +3,7 @@ version: 2.1
 # define the jobs we want to run for this project
 jobs:
   plan-apply:
-    working_directory: sock-shop/terraform
+    working_directory: ~/capstone/terraform
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -14,6 +14,10 @@ jobs:
           command: |
             terraform init -input=false
             terraform plan -out tfapply -var-file terraform.tfvars
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
      
   apply:
     docker:
