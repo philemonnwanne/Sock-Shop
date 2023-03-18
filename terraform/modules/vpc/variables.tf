@@ -1,15 +1,3 @@
-variable "region" {
-  description = "region to deploy all project resources"
-  type        = string
-  default     = "us-east-1"
-}
-
-variable "domain_name" {
-  description = "domain name to attach"
-  type        = string
-  default     = "philemonnwanne.me"
-}
-
 variable "vpc_name" {
   description = "Name of VPC"
   type        = string
@@ -20,6 +8,12 @@ variable "cidr" {
   description = "CIDR block for VPC"
   type        = string
   default     = "10.0.0.0/16"
+}
+
+variable "cluster_name" {
+  description = "project cluster name"
+  type        = string
+  default = "capstone"
 }
 
 variable "azs" {
@@ -52,31 +46,7 @@ variable "private_subnets_names" {
   default     = ["capstone-subnet-private1-us-east-1a", "capstone-subnet-private2-us-east-1b", "capstone-subnet-private2-us-east-1c"]
 }
 
-variable "instance_type" {
-  description = "the size of the instance to be deployed"
-  type        = string
-  default     = "t2.medium"
+variable "tags" {
+  description = "tags to apply to resources created by VPC module"
+  type        = map(string)
 }
-
-variable "external_dns_chart_version" {
-  description = "External-dns Helm chart version to deploy. 3.0.0 is the minimum version for this function"
-  type        = string
-  default     = "3.0.0"
-}
-
-variable "external_dns_chart_log_level" {
-  description = "External-dns Helm chart log leve. Possible values are: panic, debug, info, warn, error, fatal"
-  type        = string
-  default     = "warn"
-}
-
-# variable "external_dns_zoneType" {
-#   description = "External-dns Helm chart AWS DNS zone type (public, private or empty for both)"
-#   type        = string
-#   default     = ""
-# }
-
-# variable "external_dns_domain_filters" {
-#   description = "External-dns Domain filters."
-#   type        = list(string)
-# }

@@ -3,12 +3,12 @@ version: 2.1
 # define the jobs we want to run for this project
 jobs:
   plan-apply:
-    working_directory: ~/capstone/terraform
+    working_directory: ~/sandbox/terraform
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - checkout:
-          path: ~/capstone
+          path: ~/sandbox
       - run:
           name: terraform init & plan
           command: |
@@ -18,7 +18,7 @@ jobs:
           root: .
           paths:
             - .
-     
+    
   apply:
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
@@ -26,33 +26,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: terraform create infra
+          name: terraform
           command: |
             terraform apply -auto-approve tfapply
-   
-
-  deploy:
-    docker:
-      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: kubectl create deployment
-          command: |
-            kubectl create -f deployment.yml
-    
-
-  ingress:
-    docker:
-      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: kubectl create ingress rules
-          command: |
-            kubectl create -f ingress.yml
       - persist_to_workspace:
           root: .
           paths:
@@ -80,7 +56,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: terraform destroy infra
+          name: terraform destroy
           command: |
             terraform apply -auto-approve tfdestroy
 
@@ -97,18 +73,9 @@ workflows:
       - apply:
           requires:
             - hold-apply
-      - deploy:
-          requires:
-            - apply
-      - ingress:
-          requires:
-            - apply
-            - deploy
       - plan-destroy:
           requires:
             - apply
-            - deploy
-            - ingress
       - hold-destroy:
           type: approval
           requires:
