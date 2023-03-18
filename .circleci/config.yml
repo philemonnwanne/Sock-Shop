@@ -17,7 +17,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths:
-            - ~/capstone/sock-shop/terraform
+            - sock-shop/terraform
      
   apply:
     docker:
