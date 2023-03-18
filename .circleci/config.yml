@@ -15,7 +15,7 @@ jobs:
             terraform init -input=false
             terraform plan -out tfapply -var-file terraform.tfvars
       - persist_to_workspace:
-          root: ~/project
+          root: ~/capstone
           paths:
             - sock-shop/terraform
      
