@@ -14,8 +14,11 @@ jobs:
           command: |
             terraform init -input=false
             terraform plan -out tfapply -var-file terraform.tfvars
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ~/capstone/sock-shop/terraform
      
-    
   apply:
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
