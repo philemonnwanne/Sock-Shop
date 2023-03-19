@@ -28,7 +28,7 @@ jobs:
       - run:
           name: terraform
           command: |
-            terraform apply -auto-approve tfapply
+            echo "Say apply to YAML!"
       - persist_to_workspace:
           root: .
           paths:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: kubectl deploy infrastructure
           command: |
-            kubectl create -f ../sock-shop/complete-demo.yaml
+            echo "deploy-infra to YAML!"
       - persist_to_workspace:
           root: .
           paths:
@@ -59,7 +59,7 @@ jobs:
       - run:
           name: kubectl destroy infrastructure
           command: |
-            kubectl delete --all deployments --namespace=sock-shop
+            echo "teardown-infra YAML!"
       - persist_to_workspace:
           root: .
           paths:
@@ -74,7 +74,7 @@ jobs:
       - run:
           name: kubectl create ingress
           command: |
-            kubectl create -f ../dep-files/ingress.yml
+            echo "deploy-ingress YAML!"
       - persist_to_workspace:
           root: .
           paths:
@@ -89,7 +89,7 @@ jobs:
       - run:
           name: kubectl delete ingress
           command: |
-            kubectl -n sock-shop delete ingress,svc --all
+            echo "teardown-ingress YAML!"
       - persist_to_workspace:
           root: .
           paths:
