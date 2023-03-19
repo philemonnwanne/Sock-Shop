@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  frontend: # Name of our service
+    build: ./frontend # path to dockerfile
+    ports: # Port binding to host from docker container
+      - "3000:3000" # Bind port 3000 of host to 3000 of container
+    container_name: frontend-docker
+    restart: always # What to do if container crashes
+    links:
+      - backend
+
+  backend:
+    build: ./backend
+    ports: 
+      - "8080:8080"
+    container_name: backend-docker
+    restart: always
+    links: 
+      - db
+
+  db:
+    image: postgres:11.6-alpine
+    ports: 
+      - "5432:5432"
+    container_name: database-docker
+    restart: always
