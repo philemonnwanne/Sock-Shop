@@ -1,7 +1,7 @@
 variable "vpc_name" {
   description = "Name of VPC"
   type        = string
-  default     = "capstone_vpc"
+  default     = "capstone"
 }
 
 variable "cidr" {
