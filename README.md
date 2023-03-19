@@ -1,4 +1,4 @@
-![CircleCI]https://img.shields.io/circleci/build/github/philemonnwanne/capstone
+![CircleCI](https://img.shields.io/circleci/build/github/philemonnwanne/capstone)
 
 
 # CapStone Project
