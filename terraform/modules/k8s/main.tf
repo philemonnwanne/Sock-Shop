@@ -1,18 +1,21 @@
+# create local variables
+locals {
+  cluster_name = var.cluster_name
+}
+
 # retrieve info about the eks-cluster created on AWS
-data "aws_eks_cluster" "cluster" {
-  # depends_on = [module.eks]
-  name = local.cluster_name
-}
+# data "aws_eks_cluster" "cluster" {
+#   name = local.cluster_name
+# }
 
-data "aws_eks_cluster_auth" "cluster" {
-  # depends_on = [module.eks]
-  name = local.cluster_name
-}
+# data "aws_eks_cluster_auth" "cluster" {
+#   name = local.cluster_name
+# }
 
-# this block configures the Kubernetes provider
+# # this block configures the Kubernetes provider
 provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  host                   = var.host
+  cluster_ca_certificate = var.cluster_ca_certificate
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
     command     = "aws"
@@ -25,11 +28,11 @@ provider "kubernetes" {
   }
 }
 
-# this block configures the Helm provider
+# # this block configures the Helm provider
 provider "helm" {
   kubernetes {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    host                   = var.host
+    cluster_ca_certificate = var.cluster_ca_certificate
     exec {
       api_version = "client.authentication.k8s.io/v1"
       args        = ["eks", "get-token", "--cluster-name", local.cluster_name]
@@ -60,5 +63,3 @@ resource "helm_release" "ingress" {
     value = local.cluster_name
   }
 }
-
-

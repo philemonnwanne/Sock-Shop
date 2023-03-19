@@ -8,9 +8,14 @@ output "capstone_vpc_name" {
     value = module.vpc.name
 }
 
-output "capstone_vpc_subnet_id" {
+output "capstone_vpc_public_subnets" {
     description = "project VPC subnet ID"
     value = module.vpc.public_subnets
+}
+
+output "capstone_vpc_private_subnets" {
+    description = "project VPC subnet ID"
+    value = module.vpc.private_subnets
 }
 
 output "capstone_vpc_security_group_id" {

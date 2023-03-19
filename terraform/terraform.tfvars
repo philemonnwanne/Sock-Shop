@@ -1,6 +1,6 @@
 region = "us-east-1"
 domain_name = "philemonnwanne.me"
 cluster_name = "capstone"
-vpc_name = "capstone_vpc"
+vpc_name = "capstone"
 maintainer = "Philemon Nwanne"
 track = "Cloud/DevOps"

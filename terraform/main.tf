@@ -49,10 +49,18 @@ module "eks" {
   source  = "./modules/eks"
 
   cluster_name = local.cluster_name
-  subnet_ids = module.vpc.capstone_vpc_subnet_id
+  subnet_ids = module.vpc.capstone_vpc_private_subnets
   vpc_id = module.vpc.capstone_vpc_id
  
   tags = local.tags
+}
+
+module "k8s" {
+  source = "./modules/k8s"
+
+  cluster_name           = module.eks.cluster_name
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data.0.data)
 }
 
 # import the kubeconfig module
@@ -85,10 +93,3 @@ resource "aws_iam_role_policy_attachment" "additional" {
   role       = each.value.iam_role_name
 
 }
-
-# # import the kubeconfig module
-# module "external-dns" {
-#   source  = "./modules/externaldns"
-
-#   oidc_url = local.oidc_url
-# }

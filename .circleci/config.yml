@@ -35,6 +35,7 @@ jobs:
             - .
 
   deploy-infra:
+    working_directory: ~/capstone/sock-shop
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -43,7 +44,11 @@ jobs:
       - run:
           name: kubectl deploy infrastructure
           command: |
-            kubectl create -f ../sock-shop/ingress.yml
+            kubectl create -f ../sock-shop/complete-demo.yaml
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   teardown-infra:
     docker:
@@ -52,9 +57,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: terraform
+          name: kubectl destroy infrastructure
           command: |
-            terraform apply -auto-approve tfapply
+            kubectl delete --all deployments --namespace=sock-shop
       - persist_to_workspace:
           root: .
           paths:
@@ -70,6 +75,10 @@ jobs:
           name: kubectl create ingress
           command: |
             kubectl create -f ../dep-files/ingress.yml
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   teardown-ingress:
     docker:
@@ -78,9 +87,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: terraform
+          name: kubectl delete ingress
           command: |
-            terraform apply -auto-approve tfapply
+            kubectl -n sock-shop delete ingress,svc --all
       - persist_to_workspace:
           root: .
           paths:
