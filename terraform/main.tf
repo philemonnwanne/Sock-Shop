@@ -60,7 +60,7 @@ module "k8s" {
 
   cluster_name           = module.eks.cluster_name
   host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data.0.data)
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
 }
 
 # import the kubeconfig module
