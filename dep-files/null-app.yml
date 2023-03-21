@@ -1,154 +1,84 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: phil
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: phil-frontend
-  labels:
-    name: phil-frontend
-  namespace: phil
+  name: azure-vote-back
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: phil-frontend
+      app: azure-vote-back
   template:
     metadata:
       labels:
-        name: phil-frontend
+        app: azure-vote-back
     spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
       containers:
-      - name: phil-frontend
-        image: kikeay/frontend:latest
-        resources:
-          limits:
-            cpu: 300m
-            memory: 1000Mi
-          requests:
-            cpu: 100m
-            memory: 300Mi
+      - name: azure-vote-back
+        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
         ports:
-        - containerPort: 3000
+        - containerPort: 6379
+          name: redis
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: phil-frontend
-  labels:
-    name: phil-frontend
-  namespace: phil
+  name: azure-vote-back
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: azure-vote-back
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-vote-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-vote-front
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: azure-vote-front
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: azure-vote-front
+        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: REDIS
+          value: "azure-vote-back"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-front
 spec:
   type: NodePort
   ports:
+    # the port that this service should serve on
   - port: 80
-    targetPort: 3000
-    nodePort: 30003
+    targetPort: 80
+    nodePort: 30005
   selector:
-    name: phil-frontend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: backend
-  labels:
-    name: backend
-  namespace: phil
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      name: backend
-  template:
-    metadata:
-      labels:
-        name: backend
-    spec:
-      containers:
-      - name: backend
-        image: kikeay/backend:latest
-        resources:
-          limits:
-            cpu: 300m
-            memory: 1000Mi
-          requests:
-            cpu: 100m
-            memory: 300Mi
-        ports:
-        - containerPort: 3001
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend
-  labels:
-    name: backend
-  namespace: phil
-spec:
-  ports:
-    # the port that this service should serve on
-  - port: 3001
-    targetPort: 3001
-  selector:
-    name: backend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: phil-db
-  labels:
-    name: phil-db
-  namespace: phil
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      name: phil-db
-  template:
-    metadata:
-      labels:
-        name: phil-db
-    spec:
-      containers:
-      - name: phil-db
-        image: mongo
-        ports:
-        - name: mongo
-          containerPort: 27017
-        securityContext:
-          capabilities:
-            drop:
-              - all
-            add:
-              - CHOWN
-              - SETGID
-              - SETUID
-          readOnlyRootFilesystem: true
-        volumeMounts:
-        - mountPath: /tmp
-          name: tmp-volume
-      volumes:
-        - name: tmp-volume
-          emptyDir:
-            medium: Memory
-      nodeSelector:
-        kubernetes.io/os: linux
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: phil-db
-  labels:
-    name: phil-db
-  namespace: phil
-spec:
-  ports:
-    # the port that this service should serve on
-  - port: 27017
-    targetPort: 27017
-  selector:
-    name: phil-db
+    app: azure-vote-front
