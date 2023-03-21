@@ -1,16 +1,6 @@
 # Infra Deployment Procedure
-# --deploying with terraform
-# --deploying with ci/cd (circleci)
-
--- Checkout the circle documentation if you're new to it
-
-Points to note
-- the default terraform path varible won't work in `circleci`
-
-```ruby
-Wrong : policy = file("${path.cwd}/iam-policy.json")
-Right : policy = file("./iam-policy.json")
-```
+- Deploying with terraform :shipit:
+- Deploying with circleci [click-here](#deploying-with-cicd-circleci-checkout-the-following-articles)
 
 ## Pre-requisites
 
@@ -177,4 +167,19 @@ If you have a `~/.kube/config` file, and you aren't actively using it, run the f
 
 ```bash
 rm ~/.kube/config
+```
+
+
+## Deploying with ci/cd (circleci) checkout the following articles
+[Terraform-docs](https://developer.hashicorp.com/terraform/tutorials/automation/circle-ci)
+
+[Terraform-blog](https://circleci.com/blog/an-intro-to-infrastructure-as-code/)
+ 
+
+`Note`
+
+The default terraform `path varible` won't work in `circleci` 
+```php
+Valid : policy = file("${path.cwd}/iam-policy.json")
+Invalid : policy = file("./iam-policy.json")
 ```
