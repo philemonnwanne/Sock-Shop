@@ -118,7 +118,7 @@ Then you can show all your pods with
 kubectl get pods
 ```
 
-Now verify that all three worker nodes are part of the cluster.
+Now verify that all three worker nodes are part of the cluster
 ```bash
 kubectl get nodes
 ```
@@ -129,7 +129,7 @@ kubectl get nodes
 kubectl apply -f ingress.yml
 ```
 
-Verify that the Ingress controller is running with:
+Verify that the Ingress controller is running
 
 ```bash
 kubectl get pods -l "app.kubernetes.io/name=aws-load-balancer-controller"
@@ -165,7 +165,7 @@ If you come across the following error
 
 `Note:` This could be becuse you already have an existing kubeconfig file in `~/.kube/config`, there could be a conflict between the file to be generated.
 
-If you have a `~/.kube/config` file, and you aren't actively using it, run the following to remove it which should fix the error
+If you have a `~/.kube/config` file, and you aren't actively using it, run the following to remove it which should fix the error.
 
 ```bash
 rm ~/.kube/config
@@ -181,7 +181,7 @@ rm ~/.kube/config
 `Note`
 
 The default terraform `path varible` won't work in `circleci` 
-```php
+```ruby
 Valid : policy = file("${path.cwd}/iam-policy.json")
 Invalid : policy = file("./iam-policy.json")
 ```

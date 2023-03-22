@@ -8,11 +8,11 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     ## SSL Settings
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/044897ef-1b4e-4b39-be9b-2b9876118b28
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
     # SSL Redirect Setting
     alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
     alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
-    alb.ingress.kubernetes.io/group.name: capstone
+    alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
 spec:
   rules:
   - host: sock-shop.philemonnwanne.me
@@ -25,7 +25,7 @@ spec:
               name: front-end
               port:
                 number: 80
-                # ------- #
+  #               # ------- #
   - host: null-app.philemonnwanne.me
     http:
       paths:
@@ -36,3 +36,36 @@ spec:
               name: azure-vote-front
               port:
                 number: 80
+                # ------- #
+  - host: grafana.philemonnwanne.me
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grafana
+              port:
+                number: 80
+  #               # ------- #
+  - host: prometheus.philemonnwanne.me
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: prometheus
+              port:
+                number: 9090
+                # ------- #
+  - host: kibana.philemonnwanne.me
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: kibana
+              port:
+                number: 5601
