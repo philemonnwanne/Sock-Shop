@@ -1,3 +1,5 @@
+![CircleCI](https://img.shields.io/circleci/build/github/philemonnwanne/capstone)
+
 # Infra Deployment Procedure
 - Deploying with terraform :shipit:
 - Deploying with circleci [click-here](#deploying-with-cicd-circleci-checkout-the-following-articles)
