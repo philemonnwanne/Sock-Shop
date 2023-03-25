@@ -18,6 +18,12 @@ Deployment Procedure: [Click here to see a detailed guide on how to deploy this 
 ### Vault Authntication
 ![vault_auth](https://github.com/philemonnwanne/capstone/blob/main/images/vault_auth.png)
 
+### Terraform Apply
+![terraform_apply](https://github.com/philemonnwanne/capstone/blob/main/images/apply_output.png)
+
+### KubeConfig Update
+![update_kubeconfig](https://github.com/philemonnwanne/capstone/blob/main/images/update_kubeconfig.png)
+
 ### Grafana
 ![grafana](https://github.com/philemonnwanne/capstone/blob/main/images/grafana.png)
 
@@ -26,15 +32,6 @@ Deployment Procedure: [Click here to see a detailed guide on how to deploy this 
 
 ### Prometheus
 ![prometheus](https://github.com/philemonnwanne/capstone/blob/main/images/prometheus.png)
-
-### Terraform Apply
-![terraform_apply](https://github.com/philemonnwanne/capstone/blob/main/images/apply_output.png)
-
-### Misc
-![misc](https://github.com/philemonnwanne/capstone/blob/main/images/misc.png)
-
-### KubeConfig Update
-![update_kubeconfig](https://github.com/philemonnwanne/capstone/blob/main/images/update_kubeconfig.png)
 
 
 ## TODO
