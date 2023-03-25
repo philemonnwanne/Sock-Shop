@@ -41,14 +41,9 @@ Deploy infrastructure
 terraform apply -auto-approve
 ```
 
-It takes about 14(+/-) to setup the entire infrastructure on `AWS`
+It takes about 14mins(+/-) to setup the entire infrastructure on `AWS`
 
-Once your terraform apply command runs successfully, run the following command to retrieve the access credentials for your cluster and configure `kubectl`.
-
-Use the kubectl command to connect to the EKS Cluster and control it
-```bash
-kubectl get nodes
-```
+Once your terraform apply command runs successfully, run the following command to enable `kubectl` to communicate with your cluster by adding a new context to the kubectl config file.
 
 Update `kubeconfig`
 ```bash
@@ -106,7 +101,7 @@ kubectl get ns
 kubens
 ```
 
-`Note`: I prefer to use `kubens` as it highlights the current active `namespace`
+`Note`: I prefer to use `kubens` as it highlights the active `namespace`
 
 Switch to the `sock-shop` namespace
 ```bash

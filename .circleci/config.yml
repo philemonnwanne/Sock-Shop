@@ -28,7 +28,7 @@ jobs:
       - run:
           name: terraform
           command: |
-            echo "Say apply to YAML!"
+            terraform apply -auto-approve tfapply
       - persist_to_workspace:
           root: .
           paths:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: kubectl deploy infrastructure
           command: |
-            echo "deploy-infra to YAML!"
+            kubectl create -f ../sock-shop/complete-demo.yaml
       - persist_to_workspace:
           root: .
           paths:
@@ -59,7 +59,7 @@ jobs:
       - run:
           name: kubectl destroy infrastructure
           command: |
-            echo "teardown-infra YAML!"
+            kubectl delete --all deployments --namespace=sock-shop
       - persist_to_workspace:
           root: .
           paths:
@@ -74,7 +74,7 @@ jobs:
       - run:
           name: kubectl create ingress
           command: |
-            echo "deploy-ingress YAML!"
+            kubectl create -f ../dep-files/ingress.yml
       - persist_to_workspace:
           root: .
           paths:
@@ -89,7 +89,7 @@ jobs:
       - run:
           name: kubectl delete ingress
           command: |
-            echo "teardown-ingress YAML!"
+            kubectl -n sock-shop delete ingress,svc --all
       - persist_to_workspace:
           root: .
           paths:
@@ -104,7 +104,7 @@ jobs:
       - run:
           name: terraform create destroy plan
           command: |
-            echo "plan-destroy YAML!"
+            terraform plan -destroy -out tfdestroy -var-file variables.tf
       - persist_to_workspace:
           root: .
           paths:
@@ -119,7 +119,7 @@ jobs:
       - run:
           name: terraform destroy
           command: |
-            echo "destroy everywhere YAML!!!!"
+            terraform apply -auto-approve tfdestroy
 
 # orchestrate our job run sequence
 workflows:

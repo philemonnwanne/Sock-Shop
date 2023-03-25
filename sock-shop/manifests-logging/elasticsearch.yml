@@ -33,8 +33,10 @@ metadata:
     name: elasticsearch
   namespace: kube-system
 spec:
+  type: NodePort
   ports:
   - port: 9200
     targetPort: 9200
+    nodePort: 31606
   selector:
     name: elasticsearch
