@@ -31,7 +31,8 @@ terraform init
 
 Validate and Plan terraform
 ```bash
-terraform plan && terraform plan
+terraform validate \
+terraform plan
 ```
 
 `Note` If you used `vault`, you will be prompted to enter the vault url, in this case it is `http://127.0.0.1:8200/`
@@ -41,19 +42,26 @@ Deploy infrastructure
 terraform apply -auto-approve
 ```
 
-It takes about 14mins(+/-) to setup the entire infrastructure on `AWS`
+It takes about 14mins(+/-) to deploy the entire infrastructure on `AWS`
 
-Once your terraform apply command runs successfully, run the following command to enable `kubectl` to communicate with your cluster by adding a new context to the kubectl config file.
+Once your terraform apply command runs successfully, run the following command to retrieve the access credentials for your cluster and configure `kubectl`.
 
 Update `kubeconfig`
-```bash
+```ruby
 aws eks --region $(terraform output -raw region) update-kubeconfig \
     --name $(terraform output -raw cluster_name)
+```
+
+<!-- 
+Use the kubectl command to connect to the EKS Cluster and control it
+```bash
+kubectl get nodes
 ```
 
 ```ruby
 aws eks describe-cluster --region $(terraform output -raw region) --name $(terraform output -raw cluster_name) --query "cluster.status"
 ```
+ -->
 
 `Note` The above command will only work if you defined outputs variables for the various outputs. In my case I did not define the `region` output variable, so it won't work.
 

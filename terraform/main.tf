@@ -14,17 +14,17 @@ terraform {
   }
 }
 
-# import secrets from vault
-data "vault_generic_secret" "capstone_aws_creds" {
-    path = "secret/aws"
-}
+# # import secrets from vault
+# data "vault_generic_secret" "capstone_aws_creds" {
+#     path = "secret/aws"
+# }
 
 # this block configures the AWS provider
-provider "aws" {
-  region = local.region
-  access_key = data.vault_generic_secret.capstone_aws_creds.data["aws_access_key_id"]
-  secret_key = data.vault_generic_secret.capstone_aws_creds.data["aws_secret_access_key"]
-}
+# provider "aws" {
+#   region = local.region
+#   access_key = data.vault_generic_secret.capstone_aws_creds.data["aws_access_key_id"]
+#   secret_key = data.vault_generic_secret.capstone_aws_creds.data["aws_secret_access_key"]
+# }
 
 # retrieve info about the authnticated aws user
 data "aws_caller_identity" "current" {}

@@ -4,23 +4,52 @@ Deployment Procedure: [Click here to see a detailed guide on how to deploy this 
 
 # CapStone Project
 
-### Deployments
+## Proof of Work
 
-Link 01: [sock-shop](https://sock-shop.philemonnwanne.me)
+### Sock Shop
+![sock_shop](https://github.com/philemonnwanne/capstone/blob/main/images/sock_shop.png)
 
-Link 02: [null-app](https://null-app.philemonnwanne.me)
+### Other App
+![other_app](https://github.com/philemonnwanne/capstone/blob/main/images/other_app.png)
 
-IAM Url: https://philemonnwanne.signin.aws.amazon.com/console
+### Vault
+![vault](https://github.com/philemonnwanne/capstone/blob/main/images/vault.png)
 
+### Vault Authntication
+![vault_auth](https://github.com/philemonnwanne/capstone/blob/main/images/vault_auth.png)
 
+### Terraform Apply
+![terraform_apply](https://github.com/philemonnwanne/capstone/blob/main/images/apply_output.png)
 
-For `Monitoring/Logging/Metrics` use 
+### KubeConfig Update
+![update_kubeconfig](https://github.com/philemonnwanne/capstone/blob/main/images/update_kubeconfig.png)
 
-[prometheus.philemonnwanne.me](https://prometheus.philemonnwanne.me) :shipit:
+### Grafana
+![grafana](https://github.com/philemonnwanne/capstone/blob/main/images/grafana.png)
 
-[kibana.philemonnwanne.me](https://kibana.philemonnwanne.me) 🪵
+### CircleCI
+![circleci](https://github.com/philemonnwanne/capstone/blob/main/images/ci_cd.png)
 
-[grafana.philemonnwanne.me](https://grafana.philemonnwanne.me) 🎐
+### Prometheus
+![prometheus](https://github.com/philemonnwanne/capstone/blob/main/images/prometheus.png)
+
+### Loki
+![loki](https://github.com/philemonnwanne/capstone/blob/main/images/loki.png)
+
+### Pods (Monitoring)
+![pods_monitoring](https://github.com/philemonnwanne/capstone/blob/main/images/pods_monitoring.png)
+
+### Pods (Logging)
+![pods_logging](https://github.com/philemonnwanne/capstone/blob/main/images/pods_logging.png)
+
+### Pods (Sock-Shop)
+![pods_sock_shop](https://github.com/philemonnwanne/capstone/blob/main/images/pods_sock_shop.png)
+
+### Pods (Null-App)
+![pods_null_app](https://github.com/philemonnwanne/capstone/blob/main/images/pods_null_app.png)
+
+### Pods (Nodes)
+![nodes](https://github.com/philemonnwanne/capstone/blob/main/images/nodes.png)
 
 ## TODO
 - Add external DNS
