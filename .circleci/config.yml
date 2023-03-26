@@ -1,9 +1,21 @@
 version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@3.1.4
 
 # define the jobs we want to run for this project
 jobs:
+  aws-cli:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          parameters:
+            aws-access-key-id: AWS_ACCESS_KEY_ID
+            aws-region: AWS_DEFAULT_REGION
+            aws-secret-access-key: AWS_SECRET_ACCESS_KEY
   plan-apply:
-    working_directory: ~/capstone/terraform
+    working_directory: ~/capstone/
+    # working_directory: ~/capstone/terraform
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -29,13 +41,14 @@ jobs:
           name: terraform
           command: |
             terraform apply -auto-approve tfapply
+            
       - persist_to_workspace:
           root: .
           paths:
             - .
-
+  
   deploy-infra:
-    working_directory: ~/capstone/sock-shop
+    # working_directory: ~/capstone/sock-shop
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -44,7 +57,7 @@ jobs:
       - run:
           name: kubectl deploy infrastructure
           command: |
-            kubectl create -f ../sock-shop/complete-demo.yaml
+            kubectl apply -f complete-demo.yaml
       - persist_to_workspace:
           root: .
           paths:
@@ -74,7 +87,8 @@ jobs:
       - run:
           name: kubectl create ingress
           command: |
-            kubectl create -f ../dep-files/ingress.yml
+            kubectl config set-context --current --namespace=sock-shop
+            kubectl create -f ingress.yml
       - persist_to_workspace:
           root: .
           paths:
@@ -89,7 +103,8 @@ jobs:
       - run:
           name: kubectl delete ingress
           command: |
-            kubectl -n sock-shop delete ingress,svc --all
+            kubectl config set-context --current --namespace=sock-shop 
+            kubectl delete -f ingress.yml
       - persist_to_workspace:
           root: .
           paths:
@@ -124,6 +139,10 @@ jobs:
 # orchestrate our job run sequence
 workflows:
   version: 2
+  aws-cli:
+    jobs:
+      - aws-cli:
+          context: aws
   plan_approve_apply:
     jobs:
       - plan-apply
@@ -139,23 +158,19 @@ workflows:
             - apply
       - teardown-infra:
           requires:
-            - apply
             - deploy-infra
       - deploy-ingress:
           requires:
-            - apply
             - deploy-infra
       - teardown-ingress:
           requires:
-            - apply
             - deploy-ingress
-      - plan-destroy:
-          requires:
-            - apply
+      - plan-destroy
       - hold-destroy:
           type: approval
           requires:
             - plan-destroy
+            # - plan-apply
       - destroy:
           requires:
             - hold-destroy
