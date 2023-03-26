@@ -33,6 +33,20 @@ Deployment Procedure: [Click here to see a detailed guide on how to deploy this 
 ### Prometheus
 ![prometheus](https://github.com/philemonnwanne/capstone/blob/main/images/prometheus.png)
 
+### Loki
+![loki](https://github.com/philemonnwanne/capstone/blob/main/images/loki.png)
+
+### Pods (Monitoring)
+![pods_monitoring](https://github.com/philemonnwanne/capstone/blob/main/images/pods_monitoring.png)
+
+### Pods (Logging)
+![pods_logging](https://github.com/philemonnwanne/capstone/blob/main/images/pods_logging.png)
+
+### Pods (Sock-Shop)
+![pods_sock_shop](https://github.com/philemonnwanne/capstone/blob/main/images/pods_sock_shop.png)
+
+### Pods (Nodes)
+![nodes](https://github.com/philemonnwanne/capstone/blob/main/images/nodes.png)
 
 ## TODO
 - Add external DNS
