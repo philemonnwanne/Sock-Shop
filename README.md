@@ -45,6 +45,9 @@ Deployment Procedure: [Click here to see a detailed guide on how to deploy this 
 ### Pods (Sock-Shop)
 ![pods_sock_shop](https://github.com/philemonnwanne/capstone/blob/main/images/pods_sock_shop.png)
 
+### Pods (Null-App)
+![pods_null_app](https://github.com/philemonnwanne/capstone/blob/main/images/pods_null_app.png)
+
 ### Pods (Nodes)
 ![nodes](https://github.com/philemonnwanne/capstone/blob/main/images/nodes.png)
 
