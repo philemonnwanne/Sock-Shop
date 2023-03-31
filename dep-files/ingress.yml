@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: capstone-ingress-alb
+  name: sock-shop-ingress
   annotations:
     # Core Ingress Settings  
     kubernetes.io/ingress.class: alb
@@ -25,7 +25,24 @@ spec:
               name: front-end
               port:
                 number: 80
-  #               # ------- #
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: null-app-ingress-alb
+  annotations:
+    # Core Ingress Settings  
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    ## SSL Settings
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
+    # SSL Redirect Setting
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
+    alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
+spec:
+  rules:
   - host: null-app.philemonnwanne.me
     http:
       paths:
@@ -36,7 +53,24 @@ spec:
               name: azure-vote-front
               port:
                 number: 80
-                # ------- #
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  annotations:
+    # Core Ingress Settings  
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    ## SSL Settings
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
+    # SSL Redirect Setting
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
+    alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
+spec:
+  rules:
   - host: grafana.philemonnwanne.me
     http:
       paths:
@@ -47,7 +81,24 @@ spec:
               name: grafana
               port:
                 number: 80
-  #               # ------- #
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-ingress
+  annotations:
+    # Core Ingress Settings  
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    ## SSL Settings
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
+    # SSL Redirect Setting
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
+    alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
+spec:
+  rules:
   - host: prometheus.philemonnwanne.me
     http:
       paths:
@@ -58,25 +109,87 @@ spec:
               name: prometheus
               port:
                 number: 9090
-                # ------- #
-  - host: kibana.philemonnwanne.me
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: kibana-ingress
+#   annotations:
+#     # Core Ingress Settings  
+#     kubernetes.io/ingress.class: alb
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     ## SSL Settings
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+#     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
+#     # SSL Redirect Setting
+#     alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+#     alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
+#     alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
+# spec:
+#   rules:
+#   - host: kibana.philemonnwanne.me
+#     http:
+#       paths:
+#         - path: /
+#           pathType: Prefix
+#           backend:
+#             service:
+#               name: kibana
+#               port:
+#                 number: 5601
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: elasticsearch-ingress
+#   annotations:
+#     # Core Ingress Settings  
+#     kubernetes.io/ingress.class: alb
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     ## SSL Settings
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+#     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
+#     # SSL Redirect Setting
+#     alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+#     alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
+#     alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
+# spec:
+#   rules:
+#   - host: elasticsearch.philemonnwanne.me
+#     http:
+#       paths:
+#         - path: /
+#           pathType: Prefix
+#           backend:
+#             service:
+#               name: elasticsearch
+#               port:
+#                 number: 9200     
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: loki-ingress
+  annotations:
+    # Core Ingress Settings  
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    ## SSL Settings
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:183066416469:certificate/5bde485b-cd80-4224-9ae5-f2af342386cf
+    # SSL Redirect Setting
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: capstone-alb  # give ALB a meaningfull name otherwise a random name is assigned by AWS
+    alb.ingress.kubernetes.io/group.name: capstone-ingress-grp
+spec:
+  rules:
+  - host: loki.philemonnwanne.me
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: kibana
+              name: loki
               port:
-                number: 5601
-                  # ------- #
-  - host: elasticsearch.philemonnwanne.me
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: elasticsearch
-              port:
-                number: 9200             
+                number: 9200          
